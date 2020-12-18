@@ -142,7 +142,7 @@ export class CloudFunction {
       const firstEqualsOccurrence = envVar.indexOf("=");
       const index = envVar.substr(0, firstEqualsOccurrence);
       const varValue = envVar.substr(firstEqualsOccurrence+1);
-      envVars[index] = varValue;
+      envVars[index] = encodeURI(varValue);
     });
     return envVars;
   }
