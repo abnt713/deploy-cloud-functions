@@ -139,8 +139,10 @@ export class CloudFunction {
           `Env Vars must be in "KEY1=VALUE1,KEY2=VALUE2" format, received ${envVar}`,
         );
       }
-      const keyValue = envVar.split('=');
-      envVars[keyValue[0]] = keyValue[1];
+      const firstEqualsOccurrence = envVar.indexOf("=");
+      const index = envVar.substr(0, firstEqualsOccurrence);
+      const varValue = envVar.substr(firstEqualsOccurrence+1);
+      envVars[index] = varValue;
     });
     return envVars;
   }

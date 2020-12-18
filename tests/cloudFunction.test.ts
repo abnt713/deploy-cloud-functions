@@ -25,6 +25,15 @@ describe('CloudFunction', function () {
     expect(cf.request.environmentVariables?.KEY1).equal('VALUE1');
   });
 
+  it('creates a http function with one envVar which value contains an "=" char', function () {
+    const envVars = 'KEY1=VAL=UE1=';
+    const cf = new CloudFunction({ name, runtime, parent, envVars });
+    expect(cf.request.name).equal(`${parent}/functions/${name}`);
+    expect(cf.request.runtime).equal(runtime);
+    expect(cf.request.httpsTrigger).not.to.be.null;
+    expect(cf.request.environmentVariables?.KEY1).equal('VAL=UE1=');
+  });
+
   it('creates a http function with optionals', function () {
     const envVars = 'KEY1=VALUE1';
     const funcOptions = {
@@ -65,6 +74,17 @@ describe('CloudFunction', function () {
     expect(cf.request.environmentVariables?.KEY1).equal('VALUE1');
     expect(cf.request.environmentVariables?.KEY2).equal('VALUE2');
     expect(cf.request.environmentVariables?.KEY3).equal('VALUE3');
+  });
+
+  it('creates a http function with three envVars with a "=" char in values', function () {
+    const envVars = 'KEY1=V=ALUE1,KEY2=VALUE=2,KEY3=VALUE3=';
+    const cf = new CloudFunction({ name, runtime, parent, envVars });
+    expect(cf.request.name).equal(`${parent}/functions/${name}`);
+    expect(cf.request.runtime).equal(runtime);
+    expect(cf.request.httpsTrigger).not.to.be.null;
+    expect(cf.request.environmentVariables?.KEY1).equal('V=ALUE1');
+    expect(cf.request.environmentVariables?.KEY2).equal('VALUE=2');
+    expect(cf.request.environmentVariables?.KEY3).equal('VALUE3=');
   });
 
   it('throws an error with bad envVars', function () {
